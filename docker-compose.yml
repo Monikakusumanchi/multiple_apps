@@ -1,0 +1,52 @@
+version: "3.8"
+services:    
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    #  "postgresql://gailforce(POSTGRES_USER):gailforce(POSTGRES_PASSWORD)@postgres(container_name/POSTGRES_HOST)/gailforce(POSTGRES_DB)"
+    environment:
+      POSTGRES_DB: sales_db
+      POSTGRES_USER: gailforce
+      POSTGRES_PASSWORD: gailforce
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    networks:
+      - mynetwork
+
+  postgres1:
+    image: postgres:latest
+    #  "postgresql://customer(POSTGRES_USER):cust(POSTGRES_PASSWORD)@postgres1(container_name/POSTGRES_HOST)/Cust_db(POSTGRES_DB)"
+    #  "postgresql://customer:cust@postgres1/Cust_db"
+    container_name: postgres1
+    environment:
+      POSTGRES_DB: cust_db
+      POSTGRES_USER: customer
+      POSTGRES_PASSWORD: cust
+      # New configuration for the additional Postgres service
+      POSTGRES_HOST: postgres1
+      POSTGRES_PORT: 5433  # Use a different port than the original service (5432)
+    ports:
+      - "5433:5432"
+    expose:
+      - 5433
+    networks:
+      - mynetwork
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gailforce.com
+      PGADMIN_DEFAULT_PASSWORD: gailforce
+      PGADMIN_LISTEN_PORT: 5051
+    ports:
+      - "5051:5051"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:    
